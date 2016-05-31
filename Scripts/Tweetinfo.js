@@ -9,7 +9,6 @@ function info(id) {
     if (id == undefined) return;
 
     var t =  TwitterService.call('/statuses/show.json?id=' + id);
-    System.alert(t);
     var tweet = eval( '(' + t + ')' );
 
     var str =
