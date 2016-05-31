@@ -35,7 +35,7 @@ System.addKeyBindingHandler('V'.charCodeAt(0), 3, function (id)
     var username = TwitterService.status.get(id).user.screen_name;
     run('TiX/TiX.exe', 'Stasis ' + username + ' ' + id);
 });
-System.addKeyBindingHandler('Q'.charCodeAt(0), 3, function (id)
-{
-    run('Decchi/Decchi.exe', '-q');
-});
+//System.addKeyBindingHandler('Q'.charCodeAt(0), 3, function (id)
+//{
+//    run('Decchi/Decchi.exe', '-q');
+//});

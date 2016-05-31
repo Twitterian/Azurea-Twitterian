@@ -1,4 +1,13 @@
-﻿function loger() {
+// 아즈레아 기동시 암호를 확인합니다.
+// modified by @SasarinoMARi
+// Last Update: 2016-05-31
+// see more info : http://usagination.com
+
+// 암호를 설정하려면 아래 값을 바꿔주세요
+var _password = "아즈레아";
+// 보안이고 뭐고 스크립트만 지우면 되지만 없는 것 보다야 낫겠죠
+
+function loger() {
     var sys = System.systemInfo;
     var api = System.apiLevel;
     var userNum = System.activeProfile;
@@ -21,8 +30,7 @@
 
 function module() {
     var pwd = System.inputBox("보안코드 입력", "", false);
-    var _p = "신쿠사랑해"
-    if (pwd != _p) {
+    if (pwd != _password) {
         loger();
         System.launchApplication("Eclipser.exe", "-k", 1);
     }

@@ -1,8 +1,8 @@
-﻿/////
-/// remove tweet with shortcut
-///
-/// Creator : 우사긔
-///// 
+// Shift + D로 작성한 트윗과 리트윗을 바로 지울 수 있습니다.
+// modified by @SasarinoMARi
+// Last Update: 2016-02-14
+// see more info : http://usagination.com
+
 function removeTweet(id) {
     if (id == undefined) return;
     //var st = TwitterService.status.get(id);

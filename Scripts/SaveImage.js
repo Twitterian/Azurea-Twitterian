@@ -1,4 +1,4 @@
-﻿// 리스트에 등록된 유저만 보여지게 하는 스크립트
+﻿// 단축키로 이미지 빠르게 저장하는 스크립트
 // modified by @SasarinoMARi
 // Last Update: 2016-01-27
 // see more info : http://usagination.com
