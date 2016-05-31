@@ -7,22 +7,10 @@ var dropTweets = [];
 
 Array.prototype.indexOf = function(s)
 {
-    var start = 0;
-    var end   = this.length - 1,
-    var index = Math.floor((start + end) / 2);
-
-    while (this[index] != s && start < end)
-    {
-        if (s < this[index])
-            end = index - 1;
-        else if (s > this[index])
-            start = index + 1;
-
-        index = Math.floor((start + end) / 2);
-    }
-
-    //make sure it's the right value
-    return (this[index] != s) ? -1 : index;
+	for (var i = 0; i < this.length; ++i ){
+		if(this[i] == s) return i;
+	}
+	return -1;
 };
 
 TwitterService.addEventListener('preFilterProcessTimelineStatus', function(s)
