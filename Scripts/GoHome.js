@@ -40,6 +40,7 @@ function GetHomeString() {
 TwitterService.addEventListener('preFilterProcessTimelineStatus', function (s) {
     if (s.user.id != TwitterService.currentUser.id) return; // 내가 쓴 트윗이 아니면 예외 처리
     if (s.retweeted_by) return; // 리트윗 된 트윗은 예외 처리
+    if(System.views.currentView.viewKind != 0) return false; // 메인 뷰가 열려있을 때만 해당 스크립트가 동작하도록 합니다.
 
     for (var i = 0; i < homeStrings.length; i++) {
         if (s.text.indexOf(homeStrings[i]) != -1) {
@@ -56,15 +57,15 @@ TwitterService.addEventListener('preFilterProcessTimelineStatus', function (s) {
     return false;
 });
 
-var runedMin = -1;
+var runedHour = -1;
 function TimeFunc() {
     var date = new Date();
-    if (date.getMinutes() == 0 && runedMin != date.getMinutes()) {
+    if (date.getMinutes() == 0 && runedHour != date.getHours()) {
         if (date.getHours() >= goHour && date.getHours() <= homeHour) {
             var output = GetHomeString();
             if (output != '')
                 TwitterService.status.update(output, 0);
-            runedMin = date.getMinutes();
+            runedHour = date.getHours();
         }
     }
     System.setTimeout(TimeFunc, 1000);

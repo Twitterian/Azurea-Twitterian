@@ -3,13 +3,9 @@
 // Last Update: 2016-01-29
 // see more info : http://usagination.com
 
-// Ctrl + O : 스크립트 On / Off
-// Ctrl + L : 리스트 새로고침
-// Ctrl + I : 대상 리스트 변경
-
 var users = [];
-var listid;
-var scriptOn = '0';
+var listid = 226244466;
+var scriptOn = false;
 
 Array.prototype.indexOf = function (s) {
     for (var i = 0; i < this.length; ++i) {
@@ -18,7 +14,6 @@ Array.prototype.indexOf = function (s) {
     return -1;
 };
 function getListMembers() {
-    if (!listid) return;
     var me = eval('(' + TwitterService.call('/account/verify_credentials.json').replace("HTTP/(.*)directmessages", "") + ')');
     users.push(me);
 
@@ -30,41 +25,43 @@ function getListMembers() {
         }
         cursor = members.next_cursor;
     }
-}
-if (FileSystem.privateStore.exists('settings.ini')) {
-    var value = FileSystem.privateStore.read('settings.ini');
-    if (value != '') {
-        var lines = value.split('\n');
-        scriptOn = parseInt(lines[0]);
-        listid = lines[1];
-    }
-    if (scriptOn) getListMembers();
-}
-function getListId() {
-    listid = System.inputBox("리스트 ID", (listid ? listid : ""), false);
-    getListMembers();
+
 }
 TwitterService.addEventListener('preFilterProcessTimelineStatus', function (s) {
     // 이 메서드는 false를 반환할 때 트윗을 표시합니다
-    return scriptOn &&
-            // 트윗한 유저가 리스트에 없으면 표시안함
-            (users.indexOf(s.user.screen_name) == -1) 
-            // 리트윗한 유저가 리스트에 없으면 표시안함
-            && (s.retweeted_by && users.indexOf(s.retweeted_by) == -1)
-        
-});
-System.addEventListener('quit', function () {
-    var value = scriptOn.toString() + '\n' + listid.toString();
-    FileSystem.privateStore.write('settings.ini', value, 3);
-});
-//System.addKeyBindingHandler('L'.charCodeAt(0), 2, getListMembers);
-//System.addKeyBindingHandler('O'.charCodeAt(0), 2, function () {
-//    if (scriptOn) scriptOn = 0;
-//    else scriptOn = 1;
 
-//    if (scriptOn && !listid) getListId();
-//    System.alert("리스트 스트림 " + (scriptOn ? "" : "비") + "활성화.");
-//});
-//System.addKeyBindingHandler('I'.charCodeAt(0), 2, function () {
-//    getListId();
-//});
+    if(!scriptOn) return false;
+
+    // if(System.views.currentView.viewKind != 0)
+    //{
+    //    // 메인 뷰가 열려있을 때만 해당 스크립트가 동작하도록 합니다.
+    //    // 스트림 단위에서 차단해야지 뷰만으론 버그가
+    //    return false;
+    //}
+
+    if(users.indexOf(s.user.screen_name) == -1)
+     {
+        // 트윗한 유저가 리스트에 없으면 표시안함
+         return true;
+     }
+     if(s.retweeted_by && users.indexOf(s.retweeted_by) == -1)
+     {
+        // 리트윗한 유저가 리스트에 없으면 표시안함
+        return true;
+     }
+    return false;
+});
+
+System.addKeyBindingHandler('L'.charCodeAt(0), 1, function ()
+{
+    scriptOn =! scriptOn;
+    if(users.length == 0) getListMembers();
+    if(scriptOn)
+    {
+        System.alert("ShowOnlyListedUsers 스크립트 활성화됨.\n\n" + listid + "리스트에서 " + users.length + "명의 유저 읽어옴");
+    }
+    else
+    {
+        System.alert("ShowOnlyListedUsers 스크립트 바활성화됨.");
+    }
+});
