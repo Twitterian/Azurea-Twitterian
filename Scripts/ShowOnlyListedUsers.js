@@ -39,7 +39,7 @@ TwitterService.addEventListener('preFilterProcessTimelineStatus', function (s) {
     //    return false;
     //}
 
-    if(users.indexOf(s.user.screen_name) == -1)
+    if(!s.retweeted_by && users.indexOf(s.user.screen_name) == -1)
      {
         // 트윗한 유저가 리스트에 없으면 표시안함
          return true;
