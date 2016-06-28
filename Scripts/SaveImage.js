@@ -12,14 +12,14 @@ function SaveImage(id) {
     if (FileSystem.privateStore.exists('location.dat')) {
         var path = FileSystem.privateStore.read('location.dat') + 'Scripts/SaveImage.js.Private/AZSaveImage.exe';
         var urls = TwitterService.call('statuses/lookup.json?id=20,' + id).replace(/\\/g, '');
-        System.launchApplication(System.applicationPath, urls + " 0", 1);
+        System.launchApplication(path, urls + " 0", 1);
     }
 }
 function SaveImageA(id) {
     if (FileSystem.privateStore.exists('location.dat')) {
         var path = FileSystem.privateStore.read('location.dat') + 'Scripts/SaveImage.js.Private/AZSaveImage.exe';
         var urls = TwitterService.call('statuses/lookup.json?id=20,' + id).replace(/\\/g, '');
-        System.launchApplication(System.applicationPath, urls + " 1", 1);
+        System.launchApplication(path, urls + " 1", 1);
     }
 }
 function SaveImageC(id) {
@@ -27,7 +27,8 @@ function SaveImageC(id) {
         var path = FileSystem.privateStore.read('location.dat') + 'Scripts/SaveImage.js.Private/AZSaveImage.exe';
         var urls = TwitterService.call('statuses/lookup.json?id=20,' + id).replace(/\\/g, '');
         var category = System.inputBox("이미지 카테고리 지정", "", false).replace(/ /g, '_');
-        System.launchApplication(System.applicationPath, urls + " 2 " + category, 1);
+        if(category == undefined) return;
+        System.launchApplication(path, urls + " 2 " + category, 1);
     }
 }
 System.addKeyBindingHandler('S'.charCodeAt(0), 2, SaveImage);
