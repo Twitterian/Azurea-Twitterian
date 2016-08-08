@@ -17,11 +17,9 @@ if (FileSystem.privateStore.exists('keywords.txt')) {
     if (value != '') {
         lines = value.split('\n');
         for (var i = 0; i < lines.length; i++) {
-            var obj = lines[i].trim().split(' ');
+            var obj = lines[i].trim().split('∥');
             if (obj.length == 2) {
-                var src = obj[0].replace('_', ' ');
-                var dest = obj[1].replace('_', ' ');
-                keywords.push([src, dest]);
+                keywords.push([obj[0], obj[1]]);
             }
         }
     }

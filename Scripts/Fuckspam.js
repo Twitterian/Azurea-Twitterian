@@ -14,5 +14,5 @@ function MultilineSpam(text, allowLineCount) {
 
 TwitterService.addEventListener('preFilterProcessTimelineStatus', function (s) {
     // 이 메서드는 false를 반환할 때 트윗을 표시합니다
-    return MultilineSpam(s.text, 5);
+    return MultilineSpam(s.text, 7);
 });
