@@ -17,45 +17,45 @@ Array.prototype.indexOf = function(s)
 
 TwitterService.addEventListener('preFilterProcessTimelineStatus', function(s)
 {
-	return blockUsers.indexOf(s.user.id) != -1;
+    return blockUsers.indexOf(s.user.id) != -1;
 });
 
 // refresh the block list
-//System.addContextMenuHandler('LoadBlockList', 0, function()
-//{
-	var calltext = TwitterService.call('/blocks/ids.json');
-	var callobj = eval('(' + calltext +')');
-	if(callobj)
-	{
-	var block_count = callobj.ids.length;
-
-	for(var i = 0; i < block_count; ++i)
-	{
-		if(blockUsers_hash[callobj.ids[i]] == undefined)
-		{
-			blockUsers_hash[callobj.ids[i]] = 1;
-			blockUsers.push(callobj.ids[i]);
-		}
-	};
-//});
-
-// hook the quit event
-// save the list
-System.addEventListener('quit', function()
+System.addContextMenuHandler('블락 리스트 새로고침', 0, function()
 {
-	var value = blockUsers.join('\n');
-	if(value[0] == '\n') value = value.slice(1);
-	FileSystem.privateStore.write('BlocknMute.txt', value, 3);
+	LoadBlockList('-1');
 });
-
-// load the list
-if(FileSystem.privateStore.exists('BlocknMute.txt'))
+LoadBlockList('-1');
+function LoadBlockList(cursor)
 {
-	var value = FileSystem.privateStore.read('BlocknMute.txt');
-	if(value != '')
+	var calltext = TwitterService.call('/blocks/ids.json?cursor=' + cursor);
+	var callobj = eval('(' + calltext +')');
+	if(callobj && callobj.ids)
 	{
-		blockUsers = value.split('\n');
-		for(var i = 0; i < blockUsers.length; ++i) blockUsers_hash[blockUsers[i]] = 1;
+		var block_count = callobj.ids.length;
+
+		for(var i = 0; i < block_count; ++i)
+		{
+			if(blockUsers_hash[callobj.ids[i]] == undefined)
+			{
+				blockUsers_hash[callobj.ids[i]] = 1;
+				blockUsers.push(callobj.ids[i]);
+			}
+		}
+
+        /*
+	        System.alert( "다음 커서 : " + callobj.next_cursor_str + "\n" +
+	                  "현재 커서의 id 수 : " + callobj.ids.length + "\n" +
+	                  "전체 블락된 유저 수 : " + blockUsers.length  );
+        */
+
+		if(callobj.next_cursor_str != '0')
+        {
+            LoadBlockList(callobj.next_cursor_str);
+        }
 	}
-}
+	else
+	{
+	    System.alert("API 오류로 블락 리스트를 온전히 가져오지 못했습니다.\n가져온 블락된 유저 수 : " + blockUsers.length);
+	}
 }
